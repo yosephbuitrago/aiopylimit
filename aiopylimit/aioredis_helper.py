@@ -6,13 +6,14 @@ from asyncio import get_event_loop
 
 class AIORedisHelper(object):
     def __init__(self, host: str, port: int, is_sentinel=False,
-                 sentinel_service=None, password=None, db=1):
+                 sentinel_service=None, password=None, db=1, ssl=None):
         self.host = host
         self.port = port
         self.is_sentinel = is_sentinel
         self.sentinel_service = sentinel_service
         self.password = password
         self.db = db
+        self.ssl = ssl
         self.connection = None
         self.loop = None
 
@@ -46,7 +47,7 @@ class AIORedisHelper(object):
         else:
             connection = await aioredis.create_redis_pool(
                 (self.host, self.port),
-                password=self.password, db=self.db)
+                password=self.password, db=self.db, ssl=self.ssl)
         self.connection = connection
         return connection
 
